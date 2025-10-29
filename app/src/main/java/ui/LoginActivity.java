@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.*;
-import com.example.phonestore.R;
-import com.example.phonestore.data.UserDAO;
-import com.example.phonestore.util.SharedPrefManager;
+import com.example.shopping.R;
+import data.UserDAO;
+import util.SharedPrefManager;
 
 public class LoginActivity extends AppCompatActivity {
 

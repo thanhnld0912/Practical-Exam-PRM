@@ -3,7 +3,7 @@ package ui;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.*;
-import com.example.R;
+import com.example.shopping.R;
 import data.UserDAO;
 import model.User;
 
