@@ -12,6 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Shopping">
         <activity
+            android:name="ui.fragment.StoreMapFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name="ui.fragment.RevenueFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name="ui.fragment.CartFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name="ui.fragment.ProductListFragment"
+            android:exported="false" />
+        <activity
+            android:name="ui.MainFragmentActivity"
+            android:exported="false"
+            tools:ignore="MissingClass" />
+        <activity
             android:name="ui.LoginActivity"
             android:exported="false" />
         <activity
@@ -22,7 +41,7 @@
             android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".MainActivity"
+            android:name="ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
