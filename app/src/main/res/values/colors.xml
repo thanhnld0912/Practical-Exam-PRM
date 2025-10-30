@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="nav_dark">#212121</color> <!-- nền thanh top & bottom -->
+    <color name="nav_item_selected">#FFFFFF</color> <!-- icon/text được chọn -->
+    <color name="nav_item_unselected">#BDBDBD</color> <!-- icon/text chưa chọn -->
+
 </resources>

@@ -50,12 +50,14 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        User user = new User(0, name, email, pass);
+        User user = new User(0, name, email, pass, "user"); // default role = user
         long result = userDAO.insertUser(user);
 
-        if (result > 0)
-            Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-        else
+        if (result > 0) {
+            Toast.makeText(this, "Đăng ký thành công! Vui lòng đăng nhập.", Toast.LENGTH_SHORT).show();
+            finish(); // quay về LoginActivity
+        } else {
             Toast.makeText(this, "Email đã tồn tại!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

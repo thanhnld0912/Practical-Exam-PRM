@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/nav_products"
         android:title="Sản phẩm"
@@ -18,4 +19,8 @@
         android:id="@+id/nav_map"
         android:title="Cửa hàng"
         android:icon="@android:drawable/ic_menu_mylocation" />
+    <item
+        android:id="@+id/action_logout"
+        android:title="Đăng xuất"
+        app:showAsAction="never" />
 </menu>

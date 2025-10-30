@@ -6,62 +6,64 @@ import android.os.Bundle;
 import android.widget.*;
 import com.example.shopping.R;
 import data.UserDAO;
+import model.User;
 import util.SharedPrefManager;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText edtEmail, edtPassword;
+    EditText edEmail, edPassword;
     CheckBox chkRemember;
     Button btnLogin, btnRegister;
     UserDAO userDAO;
-    SharedPrefManager pref;
+    SharedPrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        edtEmail = findViewById(R.id.edtEmail);
-        edtPassword = findViewById(R.id.edtPassword);
+        edEmail = findViewById(R.id.edEmail);
+        edPassword = findViewById(R.id.edPassword);
         chkRemember = findViewById(R.id.chkRemember);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
 
         userDAO = new UserDAO(this);
-        pref = new SharedPrefManager(this);
+        prefManager = new SharedPrefManager(this);
 
-        // Nếu user đã chọn Remember Me
-        if (pref.isRemembered()) {
-            edtEmail.setText(pref.getEmail());
-            edtPassword.setText(pref.getPassword());
-            chkRemember.setChecked(true);
-        }
-
-        btnLogin.setOnClickListener(v -> loginUser());
-        btnRegister.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-        });
-    }
-
-    private void loginUser() {
-        String email = edtEmail.getText().toString().trim();
-        String pass = edtPassword.getText().toString();
-
-        if (email.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        if (prefManager.isLoggedIn()) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
             return;
         }
 
-        boolean isValid = userDAO.checkLogin(email, pass);
-
-        if (isValid) {
-            pref.saveLogin(email, pass, chkRemember.isChecked());
-            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        } else {
-            Toast.makeText(this, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+        if (prefManager.isRemembered()) {
+            edEmail.setText(prefManager.getEmail());
+            edPassword.setText(prefManager.getPassword());
+            chkRemember.setChecked(true);
         }
+
+        btnLogin.setOnClickListener(v -> {
+            String email = edEmail.getText().toString().trim();
+            String password = edPassword.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            User user = userDAO.getUserByEmail(email);
+            if (user != null && user.getPassword().equals(password)) {
+                // Save session (incl. role)
+                prefManager.saveLogin(user, chkRemember.isChecked());
+                Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 }
