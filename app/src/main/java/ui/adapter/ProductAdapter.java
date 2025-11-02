@@ -5,7 +5,11 @@ import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.shopping.R;
+
 import model.Product;
 import java.util.List;
 
@@ -45,10 +49,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product p = productList.get(position);
         holder.tvName.setText(p.getName());
-        holder.tvPrice.setText(String.format("%.0f VNĐ", p.getPrice()));
+        holder.tvPrice.setText(String.format("%,.0f VNĐ", p.getPrice()));
         holder.tvDesc.setText(p.getDescription());
 
-        // Admin sees edit/delete; user doesn't.
+        // ✅ Load ảnh online bằng Glide
+        Glide.with(context)
+                .load(p.getImage()) // URL ảnh trong DB
+                .placeholder(R.drawable.no_image) // hiển thị khi đang load
+                .error(R.drawable.no_image)       // hiển thị khi lỗi
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.ivProduct);
+
+        // Hiển thị nút theo quyền
         holder.btnEdit.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         holder.btnDelete.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
 
@@ -58,8 +70,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.btnDelete.setOnClickListener(v -> {
             if (listener != null) listener.onDelete(p);
         });
-
-        // Add to cart visible for all users
         holder.btnAddToCart.setOnClickListener(v -> {
             if (listener != null) listener.onAddToCart(p);
         });
@@ -72,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvPrice, tvDesc;
+        ImageView ivProduct;
         ImageButton btnEdit, btnDelete;
         Button btnAddToCart;
 
@@ -80,6 +91,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvName = itemView.findViewById(R.id.tvName);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDesc = itemView.findViewById(R.id.tvDesc);
+            ivProduct = itemView.findViewById(R.id.ivProduct);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
